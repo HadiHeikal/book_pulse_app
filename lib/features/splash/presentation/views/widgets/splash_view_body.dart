@@ -1,5 +1,6 @@
-import 'package:book_pulse_app/features/home/presentation/views/home_view.dart';
+import 'package:book_pulse_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class SplashViewBody extends StatefulWidget {
   const SplashViewBody({super.key});
@@ -70,10 +71,8 @@ class _SplashViewBodyState extends State<SplashViewBody>
       const Duration(seconds: 2),
       () {
         if (mounted) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const HomeView()),
-          );
+          // GoRouter replaces the splash route so the user can't go back to it
+          context.go(AppRoutes.home);
         }
       },
     );
