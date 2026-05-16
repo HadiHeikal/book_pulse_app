@@ -1,3 +1,4 @@
+import 'package:book_pulse_app/core/constants/app_colors.dart';
 import 'package:book_pulse_app/features/splash/presentation/views/splash_view.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,11 @@ class BookPulse extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: SplashView(),
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: AppColors.mainColor,
+      ),
+      home: const SplashView(),
     );
   }
 }
