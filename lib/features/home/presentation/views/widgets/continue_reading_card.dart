@@ -1,8 +1,11 @@
 import 'package:book_pulse_app/core/constants/app_colors.dart';
 import 'package:book_pulse_app/core/constants/app_text_styles.dart';
 import 'package:book_pulse_app/features/home/data/models/book_model.dart';
+import 'package:book_pulse_app/features/home/presentation/viewmodels/home_viewmodel.dart';
+import 'package:book_pulse_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
+import 'package:go_router/go_router.dart';
 
 class ContinueReadingCard extends StatelessWidget {
   final BookModel book;
@@ -13,17 +16,27 @@ class ContinueReadingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final progressPercent = (book.readingProgress * 100).toInt();
 
-    return Container(
-      width: 140,
-      margin: const EdgeInsets.only(right: 14),
-      decoration: BoxDecoration(
-        color: AppColors.cardColor,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.divider),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+    return GestureDetector(
+      onTap: () {
+        context.push(
+          AppRoutes.bookDetails,
+          extra: {
+            'book': book,
+            'relatedBooks': HomeViewModel().featuredBooks,
+          },
+        );
+      },
+      child: Container(
+        width: 140,
+        margin: const EdgeInsets.only(right: 14),
+        decoration: BoxDecoration(
+          color: AppColors.cardColor,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppColors.divider),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
           // Book cover
           ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
@@ -90,6 +103,6 @@ class ContinueReadingCard extends StatelessWidget {
           ),
         ],
       ),
-    );
+    ));
   }
 }

@@ -1,7 +1,10 @@
 import 'package:book_pulse_app/core/constants/app_colors.dart';
 import 'package:book_pulse_app/core/constants/app_text_styles.dart';
 import 'package:book_pulse_app/features/home/data/models/book_model.dart';
+import 'package:book_pulse_app/features/home/presentation/viewmodels/home_viewmodel.dart';
+import 'package:book_pulse_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class FeaturedBookCard extends StatelessWidget {
   final BookModel book;
@@ -10,8 +13,18 @@ class FeaturedBookCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+    return GestureDetector(
+      onTap: () {
+        context.push(
+          AppRoutes.bookDetails,
+          extra: {
+            'book': book,
+            'relatedBooks': HomeViewModel().bestSellers,
+          },
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
@@ -138,6 +151,6 @@ class FeaturedBookCard extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ));
   }
 }

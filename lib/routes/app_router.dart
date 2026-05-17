@@ -1,3 +1,5 @@
+import 'package:book_pulse_app/features/home/data/models/book_model.dart';
+import 'package:book_pulse_app/features/home/presentation/views/book_details_view.dart';
 import 'package:book_pulse_app/features/home/presentation/views/home_view.dart';
 import 'package:book_pulse_app/features/splash/presentation/views/splash_view.dart';
 import 'package:book_pulse_app/routes/app_routes.dart';
@@ -24,6 +26,16 @@ class AppRouter {
       path: AppRoutes.home,
       name: 'home',
       builder: (context, state) => const HomeView(),
+    ),
+    GoRoute(
+      path: AppRoutes.bookDetails,
+      name: 'bookDetails',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>;
+        final book = extra['book'] as BookModel;
+        final related = extra['relatedBooks'] as List<BookModel>;
+        return BookDetailsView(book: book, relatedBooks: related);
+      },
     ),
   ];
 }

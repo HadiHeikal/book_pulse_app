@@ -1,8 +1,11 @@
 import 'package:book_pulse_app/core/constants/app_colors.dart';
 import 'package:book_pulse_app/core/constants/app_text_styles.dart';
 import 'package:book_pulse_app/features/home/data/models/book_model.dart';
+import 'package:book_pulse_app/features/home/presentation/viewmodels/home_viewmodel.dart';
+import 'package:book_pulse_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
+import 'package:go_router/go_router.dart';
 
 class BestSellerItem extends StatelessWidget {
   final BookModel book;
@@ -11,8 +14,18 @@ class BestSellerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 14),
+    return GestureDetector(
+      onTap: () {
+        context.push(
+          AppRoutes.bookDetails,
+          extra: {
+            'book': book,
+            'relatedBooks': HomeViewModel().featuredBooks,
+          },
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 14),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: AppColors.cardColor,
@@ -131,6 +144,6 @@ class BestSellerItem extends StatelessWidget {
           ),
         ],
       ),
-    );
+    ));
   }
 }
