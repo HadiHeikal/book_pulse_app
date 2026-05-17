@@ -2,7 +2,7 @@ import 'package:book_pulse_app/core/services/api_error.dart';
 import 'package:dio/dio.dart';
 
 class ApiException {
-  static ApiError handleEror(DioException error) {
+  static ApiError handleError(DioException error) {
     switch (error.type) {
       case DioExceptionType.connectionTimeout:
         return ApiError(message: 'Connection timeout');
