@@ -9,4 +9,10 @@ class ImageLinks {
         smallThumbnail: smallThumbnail ?? this.smallThumbnail,
         thumbnail: thumbnail ?? this.thumbnail,
       );
+  factory ImageLinks.fromJson(Map<String, dynamic> json) {
+    return ImageLinks(
+      smallThumbnail: json['smallThumbnail'] ?? '',
+      thumbnail: json['thumbnail'] ?? '',
+    );
+  }
 }

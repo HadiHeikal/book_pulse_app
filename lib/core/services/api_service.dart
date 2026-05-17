@@ -7,7 +7,7 @@ class ApiService {
 
   /// Crud
   /// get request
-  Future<dynamic> get(String endPoint) async {
+  Future<dynamic> get({required String endPoint}) async {
     try {
       final Response response = await _dioClient.dio.get(endPoint);
       return response.data;
@@ -17,7 +17,10 @@ class ApiService {
   }
 
   /// post request
-  Future<dynamic> post(String endPoint, {Map<String, dynamic>? data}) async {
+  Future<dynamic> post({
+    required String endPoint,
+    Map<String, dynamic>? data,
+  }) async {
     try {
       final Response response = await _dioClient.dio.post(endPoint, data: data);
       return response.data;
@@ -27,7 +30,10 @@ class ApiService {
   }
 
   /// put request
-  Future<dynamic> put(String endPoint, {Map<String, dynamic>? data}) async {
+  Future<dynamic> put({
+    required String endPoint,
+    Map<String, dynamic>? data,
+  }) async {
     try {
       final Response response = await _dioClient.dio.put(endPoint, data: data);
       return response.data;
@@ -37,7 +43,7 @@ class ApiService {
   }
 
   /// delete request
-  Future<dynamic> delete(String endPoint) async {
+  Future<dynamic> delete({required String endPoint}) async {
     try {
       final Response response = await _dioClient.dio.delete(endPoint);
       return response.data;

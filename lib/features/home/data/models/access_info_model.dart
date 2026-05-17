@@ -50,4 +50,23 @@ class AccessInfo {
     accessViewStatus: accessViewStatus ?? this.accessViewStatus,
     quoteSharingAllowed: quoteSharingAllowed ?? this.quoteSharingAllowed,
   );
+  factory AccessInfo.fromJson(Map<String, dynamic> json) {
+    return AccessInfo(
+      country: json['country'] ?? 'N/A',
+      viewability: json['viewability'] ?? 'NO_VIEW',
+      embeddable: json['embeddable'] ?? false,
+      publicDomain: json['publicDomain'] ?? false,
+      textToSpeechPermission: json['textToSpeechPermission'] ?? 'UNKNOWN',
+      // الـ epub والـ pdf ممكن يكونوا null في some books
+      epub: json['epub'] != null
+          ? Epub.fromJson(json['epub'] as Map<String, dynamic>)
+          : Epub(isAvailable: false, acsTokenLink: ''),
+      pdf: json['pdf'] != null
+          ? Pdf.fromJson(json['pdf'] as Map<String, dynamic>)
+          : Pdf(isAvailable: false, downloadLink: ''),
+      webReaderLink: json['webReaderLink'] ?? '',
+      accessViewStatus: json['accessViewStatus'] ?? 'NONE',
+      quoteSharingAllowed: json['quoteSharingAllowed'] ?? false,
+    );
+  }
 }

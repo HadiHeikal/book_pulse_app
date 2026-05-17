@@ -37,6 +37,60 @@ class BookModel extends Equatable {
     this.searchInfo,
   });
 
+  // 👇 ضيف الـ factory الميثود دي جوه الكلاس عشان الإيرور يختفي
+  factory BookModel.fromJson(Map<String, dynamic> json) {
+    // استخراج الـ volumeInfo بشكل منفصل لتسهيل قراءة الـ لستة والـ title والـ authors
+    final volumeInfoJson = json['volumeInfo'] as Map<String, dynamic>?;
+
+    return BookModel(
+      id: json['id'] as String? ?? '',
+      // الـ title والـ authors والـ cover غالباً بيبقوا جوه الـ volumeInfo في Google Books API
+      title:
+          volumeInfoJson?['title'] as String? ??
+          json['title'] as String? ??
+          'No Title',
+      author:
+          (volumeInfoJson?['authors'] as List<dynamic>?)?.first as String? ??
+          json['author'] as String? ??
+          'Unknown Author',
+      coverUrl:
+          volumeInfoJson?['imageLinks']?['thumbnail'] as String? ??
+          json['coverUrl'] as String? ??
+          '',
+      description:
+          volumeInfoJson?['description'] as String? ??
+          json['description'] as String? ??
+          '',
+
+      // معالجة الأرقام بشكل آمن لمنع الـ Type cast exception (int to double)
+      price: (json['price'] as num?)?.toDouble() ?? 0.0,
+      rating:
+          (volumeInfoJson?['averageRating'] as num?)?.toDouble() ??
+          (json['rating'] as num?)?.toDouble() ??
+          0.0,
+      ratingCount:
+          volumeInfoJson?['ratingsCount'] as int? ??
+          json['ratingCount'] as int? ??
+          0,
+      readingProgress: (json['readingProgress'] as num?)?.toDouble() ?? 0.0,
+      genre: json['genre'] as String? ?? '',
+
+      // الـ Sub-Models بتاعتك (تأكد إن جواههم من برضه من وجود .fromJson)
+      volumeInfo: volumeInfoJson != null
+          ? VolumeInfo.fromJson(volumeInfoJson)
+          : null,
+      saleInfo: json['saleInfo'] != null
+          ? SaleInfo.fromJson(json['saleInfo'] as Map<String, dynamic>)
+          : null,
+      accessInfo: json['accessInfo'] != null
+          ? AccessInfo.fromJson(json['accessInfo'] as Map<String, dynamic>)
+          : null,
+      searchInfo: json['searchInfo'] != null
+          ? SearchInfo.fromJson(json['searchInfo'] as Map<String, dynamic>)
+          : null,
+    );
+  }
+
   @override
   List<Object?> get props => [
     id,
@@ -49,5 +103,9 @@ class BookModel extends Equatable {
     ratingCount,
     readingProgress,
     genre,
+    volumeInfo,
+    saleInfo,
+    accessInfo,
+    searchInfo,
   ];
 }
