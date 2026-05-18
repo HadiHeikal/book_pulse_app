@@ -7,12 +7,10 @@ part 'featured_book_state.dart';
 
 class FeaturedBookCubit extends Cubit<FeaturedBookState> {
   FeaturedBookCubit(this.homeRepo) : super(FeaturedBookInitial());
-
+  // dependency injection using constructor injection
   final HomeRepo homeRepo;
-
   Future<void> fetchFeaturedBooks() async {
     emit(FeaturedBookLoading());
-    // dependency injection using constructor injection
     var result = await homeRepo.fetchFeaturedBooks();
     result.fold(
       onSuccess: (booksList) {
