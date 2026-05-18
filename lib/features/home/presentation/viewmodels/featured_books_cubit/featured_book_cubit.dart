@@ -6,7 +6,7 @@ import 'package:equatable/equatable.dart';
 part 'featured_book_state.dart';
 
 class FeaturedBookCubit extends Cubit<FeaturedBookState> {
-  FeaturedBookCubit(this.homeRepo) : super(FeaturedBookInitial());
+  FeaturedBookCubit({required this.homeRepo}) : super(FeaturedBookInitial());
   // dependency injection using constructor injection
   final HomeRepo homeRepo;
   Future<void> fetchFeaturedBooks() async {

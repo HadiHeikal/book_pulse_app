@@ -3,21 +3,21 @@ import 'package:book_pulse_app/features/home/data/models/book_model.dart';
 import 'package:book_pulse_app/features/home/data/repos/home_repo.dart';
 import 'package:equatable/equatable.dart';
 
-part 'newest_books_state.dart';
+part 'best_seller_state.dart';
 
-class NewestBooksCubit extends Cubit<NewestBooksState> {
-  NewestBooksCubit({required this.homeRepo}) : super(NewestBooksInitial());
+class BestSellerCubit extends Cubit<BestSellerState> {
+  BestSellerCubit({required this.homeRepo}) : super(BestSellerInitial());
   // dependency injection using constructor injection
   final HomeRepo homeRepo;
-  Future<void> fetchNewestBooks() async {
-    emit(NewestBooksLoading());
-    var result = await homeRepo.fetchNewestBooks();
+  Future<void> fetchBestSellerBooks() async {
+    emit(BestSellerLoading());
+    var result = await homeRepo.fetchBestSellerBooks();
     result.fold(
       onSuccess: (booksList) {
-        emit(NewestBooksSuccess(books: booksList));
+        emit(BestSellerSuccess(books: booksList));
       },
       onFailure: (apiError) {
-        emit(NewestBooksFailure(errorMessage: apiError.message));
+        emit(BestSellerFailure(errorMessage: apiError.message));
       },
     );
   }
