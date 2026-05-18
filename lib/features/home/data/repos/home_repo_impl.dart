@@ -10,17 +10,58 @@ class HomeRepoImpl implements HomeRepo {
 
   HomeRepoImpl(this.apiService);
 
+  // helper method to parse books from API response
+  List<BookModel> _parseBooks(Map<String, dynamic> data) {
+    List<BookModel> books = [];
+    for (var item in data['items']) {
+      books.add(BookModel.fromJson(item));
+    }
+    return books;
+  }
+
+  // fetch newest books from API
   @override
   Future<Result<List<BookModel>>> fetchNewestBooks() async {
     try {
       var data = await apiService.get(endPoint: searchFreeNewestBooksEndpoint);
 
-      List<BookModel> books = [];
-      for (var item in data['items']) {
-        books.add(BookModel.fromJson(item));
-      }
+      return Success(_parseBooks(data));
+    } on DioException catch (e) {
+      return Failure(ApiException.handleError(e));
+    }
+  }
 
-      return Success(books);
+  // fetch featured books from API
+  @override
+  Future<Result<List<BookModel>>> fetchFeaturedBooks() async {
+    try {
+      var data = await apiService.get(endPoint: searchFeaturedBooksEndpoint);
+
+      return Success(_parseBooks(data));
+    } on DioException catch (e) {
+      return Failure(ApiException.handleError(e));
+    }
+  }
+
+  // fetch best seller books from API
+  @override
+  Future<Result<List<BookModel>>> fetchBestSellerBooks() async {
+    try {
+      var data = await apiService.get(endPoint: searchBestSellerBooksEndpoint);
+
+      return Success(_parseBooks(data));
+    } on DioException catch (e) {
+      return Failure(ApiException.handleError(e));
+    }
+  }
+
+  // fetch top rated books from API
+  @override
+  Future<Result<List<BookModel>>> fetchTopRatedBooks() async {
+    try {
+      var data = await apiService.get(endPoint: searchTopRatedBooksEndpoint);
+
+      return Success(_parseBooks(data));
     } on DioException catch (e) {
       return Failure(ApiException.handleError(e));
     }

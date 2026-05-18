@@ -3,6 +3,9 @@ import 'package:book_pulse_app/features/home/data/models/book_model.dart';
 
 abstract class HomeRepo {
   Future<Result<List<BookModel>>> fetchNewestBooks();
+  Future<Result<List<BookModel>>> fetchFeaturedBooks();
+  Future<Result<List<BookModel>>> fetchBestSellerBooks();
+  Future<Result<List<BookModel>>> fetchTopRatedBooks();
 }
 
 sealed class Result<T> {
