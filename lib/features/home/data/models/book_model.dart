@@ -68,8 +68,11 @@ class BookModel extends Equatable {
           json['author'] as String? ??
           'Unknown Author',
       coverUrl:
-          volumeInfoJson?['imageLinks']?['thumbnail'] as String? ??
-          json['coverUrl'] as String? ??
+          (volumeInfoJson?['imageLinks']?['thumbnail'] as String?)?.replaceAll(
+            'http://',
+            'https://',
+          ) ??
+          (json['coverUrl'] as String?)?.replaceAll('http://', 'https://') ??
           '',
       description:
           volumeInfoJson?['description'] as String? ??

@@ -1,6 +1,6 @@
 import 'package:book_pulse_app/core/constants/app_colors.dart';
 import 'package:book_pulse_app/core/services/api_service_locaor.dart';
-import 'package:book_pulse_app/features/home/data/repos/home_repo_impl.dart';
+import 'package:book_pulse_app/features/home/data/repos/home_repo.dart';
 import 'package:book_pulse_app/features/home/presentation/viewmodels/best_seller_cubit/best_seller_cubit.dart';
 import 'package:book_pulse_app/features/home/presentation/viewmodels/featured_books_cubit/featured_book_cubit.dart';
 import 'package:book_pulse_app/features/home/presentation/viewmodels/newest_books_cubit/newest_books_cubit.dart';
@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
+  setupServiceLocator();
   runApp(const BookPulse());
 }
 
@@ -22,22 +23,22 @@ class BookPulse extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) =>
-              FeaturedBookCubit(homeRepo: getIt.get<HomeRepoImpl>())
+              FeaturedBookCubit(homeRepo: getIt.get<HomeRepo>())
                 ..fetchFeaturedBooks(),
         ),
         BlocProvider(
           create: (context) =>
-              NewestBooksCubit(homeRepo: getIt.get<HomeRepoImpl>())
+              NewestBooksCubit(homeRepo: getIt.get<HomeRepo>())
                 ..fetchNewestBooks(),
         ),
         BlocProvider(
           create: (context) =>
-              TopRatedCubit(homeRepo: getIt.get<HomeRepoImpl>())
+              TopRatedCubit(homeRepo: getIt.get<HomeRepo>())
                 ..fetchTopRatedBooks(),
         ),
         BlocProvider(
           create: (context) =>
-              BestSellerCubit(homeRepo: getIt.get<HomeRepoImpl>())
+              BestSellerCubit(homeRepo: getIt.get<HomeRepo>())
                 ..fetchBestSellerBooks(),
         ),
       ],

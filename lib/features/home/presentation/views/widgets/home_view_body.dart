@@ -30,9 +30,7 @@ class HomeViewBody extends StatelessWidget {
         const SliverToBoxAdapter(child: Gap(28)),
 
         // ─── Featured Books ───────────────────────────────────────
-        SliverToBoxAdapter(
-          child: FeaturedBooksSection(books: viewModel.featuredBooks),
-        ),
+        SliverToBoxAdapter(child: FeaturedBooksSection()),
         const SliverToBoxAdapter(child: Gap(32)),
 
         // ─── Continue Reading ─────────────────────────────────────

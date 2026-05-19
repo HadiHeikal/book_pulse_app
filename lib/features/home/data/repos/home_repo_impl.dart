@@ -1,9 +1,8 @@
 import 'package:book_pulse_app/core/constants/app_strings.dart';
-import 'package:book_pulse_app/core/services/api_exceptions.dart';
+import 'package:book_pulse_app/core/services/api_error.dart';
 import 'package:book_pulse_app/core/services/api_service.dart';
 import 'package:book_pulse_app/features/home/data/models/book_model.dart';
 import 'package:book_pulse_app/features/home/data/repos/home_repo.dart';
-import 'package:dio/dio.dart';
 
 class HomeRepoImpl implements HomeRepo {
   final ApiService apiService;
@@ -13,8 +12,10 @@ class HomeRepoImpl implements HomeRepo {
   // helper method to parse books from API response
   List<BookModel> _parseBooks(Map<String, dynamic> data) {
     List<BookModel> books = [];
-    for (var item in data['items']) {
-      books.add(BookModel.fromJson(item));
+    if (data['items'] != null) {
+      for (var item in data['items']) {
+        books.add(BookModel.fromJson(item));
+      }
     }
     return books;
   }
@@ -26,8 +27,11 @@ class HomeRepoImpl implements HomeRepo {
       var data = await apiService.get(endPoint: searchFreeNewestBooksEndpoint);
 
       return Success(_parseBooks(data));
-    } on DioException catch (e) {
-      return Failure(ApiException.handleError(e));
+    } catch (e) {
+      if (e is ApiError) {
+        return Failure(e);
+      }
+      return Failure(ApiError(message: e.toString()));
     }
   }
 
@@ -38,8 +42,11 @@ class HomeRepoImpl implements HomeRepo {
       var data = await apiService.get(endPoint: searchFeaturedBooksEndpoint);
 
       return Success(_parseBooks(data));
-    } on DioException catch (e) {
-      return Failure(ApiException.handleError(e));
+    } catch (e) {
+      if (e is ApiError) {
+        return Failure(e);
+      }
+      return Failure(ApiError(message: e.toString()));
     }
   }
 
@@ -50,8 +57,11 @@ class HomeRepoImpl implements HomeRepo {
       var data = await apiService.get(endPoint: searchBestSellerBooksEndpoint);
 
       return Success(_parseBooks(data));
-    } on DioException catch (e) {
-      return Failure(ApiException.handleError(e));
+    } catch (e) {
+      if (e is ApiError) {
+        return Failure(e);
+      }
+      return Failure(ApiError(message: e.toString()));
     }
   }
 
@@ -62,8 +72,11 @@ class HomeRepoImpl implements HomeRepo {
       var data = await apiService.get(endPoint: searchTopRatedBooksEndpoint);
 
       return Success(_parseBooks(data));
-    } on DioException catch (e) {
-      return Failure(ApiException.handleError(e));
+    } catch (e) {
+      if (e is ApiError) {
+        return Failure(e);
+      }
+      return Failure(ApiError(message: e.toString()));
     }
   }
 }
