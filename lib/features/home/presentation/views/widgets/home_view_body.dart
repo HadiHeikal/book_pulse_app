@@ -46,7 +46,7 @@ class HomeViewBody extends StatelessWidget {
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: TopRatedSection(book: viewModel.topRatedBook),
+            child: TopRatedSection(),
           ),
         ),
         const SliverToBoxAdapter(child: Gap(32)),
