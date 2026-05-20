@@ -1,5 +1,4 @@
 import 'package:book_pulse_app/core/constants/app_colors.dart';
-import 'package:book_pulse_app/features/home/data/models/book_model.dart';
 import 'package:book_pulse_app/features/home/presentation/viewmodels/newest_books_cubit/newest_books_cubit.dart';
 import 'package:book_pulse_app/features/home/presentation/views/widgets/continue_reading_card.dart';
 import 'package:book_pulse_app/features/home/presentation/views/widgets/section_header.dart';
@@ -8,9 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 
 class ContinueReadingSection extends StatelessWidget {
-  final List<BookModel> books;
-
-  const ContinueReadingSection({super.key, required this.books});
+  const ContinueReadingSection({super.key});
 
   @override
   Widget build(BuildContext context) {

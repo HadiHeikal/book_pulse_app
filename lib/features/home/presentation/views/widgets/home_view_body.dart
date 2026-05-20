@@ -37,9 +37,7 @@ class HomeViewBody extends StatelessWidget {
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: ContinueReadingSection(
-              books: viewModel.continueReadingBooks,
-            ),
+            child: ContinueReadingSection(),
           ),
         ),
         const SliverToBoxAdapter(child: Gap(32)),
