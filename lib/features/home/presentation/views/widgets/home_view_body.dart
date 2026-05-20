@@ -1,5 +1,3 @@
-import 'package:book_pulse_app/features/home/presentation/viewmodels/home_viewmodel.dart';
-import 'package:book_pulse_app/features/home/presentation/views/widgets/best_seller_item.dart';
 import 'package:book_pulse_app/features/home/presentation/views/widgets/best_seller_section.dart';
 import 'package:book_pulse_app/features/home/presentation/views/widgets/continue_reading_section.dart';
 import 'package:book_pulse_app/features/home/presentation/views/widgets/custom_book_pulse_appbar.dart';
@@ -14,7 +12,6 @@ class HomeViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = HomeViewModel();
     final topPadding = MediaQuery.of(context).padding.top;
 
     return CustomScrollView(

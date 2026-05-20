@@ -1,6 +1,5 @@
 import 'package:book_pulse_app/core/constants/app_colors.dart';
 import 'package:book_pulse_app/core/constants/app_text_styles.dart';
-import 'package:book_pulse_app/features/home/data/models/book_model.dart';
 import 'package:book_pulse_app/features/home/presentation/viewmodels/home_viewmodel.dart';
 import 'package:book_pulse_app/features/home/presentation/viewmodels/top_rated_cubit/top_rated_cubit.dart';
 import 'package:book_pulse_app/routes/app_routes.dart';
