@@ -15,6 +15,7 @@ class BookModel extends Equatable {
   final int ratingCount;
   final double readingProgress;
   final String genre;
+  final String previewUrl;
   final VolumeInfo? volumeInfo;
   final SaleInfo? saleInfo;
   final AccessInfo? accessInfo;
@@ -31,6 +32,7 @@ class BookModel extends Equatable {
     this.ratingCount = 0,
     this.readingProgress = 0.0,
     this.genre = '',
+    this.previewUrl = '',
     this.volumeInfo,
     this.saleInfo,
     this.accessInfo,
@@ -49,6 +51,7 @@ class BookModel extends Equatable {
     ratingCount,
     readingProgress,
     genre,
+    previewUrl,
     volumeInfo,
     saleInfo,
     accessInfo,
@@ -56,6 +59,12 @@ class BookModel extends Equatable {
   ];
   factory BookModel.fromJson(Map<String, dynamic> json) {
     final volumeInfoJson = json['volumeInfo'] as Map<String, dynamic>?;
+    final accessInfoJson = json['accessInfo'] as Map<String, dynamic>?;
+    final previewLink =
+        volumeInfoJson?['previewLink'] as String? ??
+        accessInfoJson?['webReaderLink'] as String? ??
+        json['previewUrl'] as String? ??
+        '';
 
     return BookModel(
       id: json['id'] as String? ?? '',
@@ -91,6 +100,7 @@ class BookModel extends Equatable {
           0,
       readingProgress: (json['readingProgress'] as num?)?.toDouble() ?? 0.0,
       genre: json['genre'] as String? ?? '',
+      previewUrl: previewLink.replaceAll('http://', 'https://'),
     );
   }
 }

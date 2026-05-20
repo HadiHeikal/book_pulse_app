@@ -124,7 +124,10 @@ class BookDetailsViewBody extends StatelessWidget {
           // ─── Action buttons ───────────────────────────────────────
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: BookDetailsActionButtons(price: book.price),
+            child: BookDetailsActionButtons(
+              price: book.price,
+              previewUrl: book.previewUrl,
+            ),
           ),
 
           const Gap(36),
