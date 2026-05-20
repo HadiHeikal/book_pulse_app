@@ -6,6 +6,7 @@ abstract class HomeRepo {
   Future<Result<List<BookModel>>> fetchFeaturedBooks();
   Future<Result<List<BookModel>>> fetchBestSellerBooks();
   Future<Result<List<BookModel>>> fetchTopRatedBooks();
+  Future<Result<List<BookModel>>> fetchSimilarBooks(BookModel book);
 }
 
 sealed class Result<T> {

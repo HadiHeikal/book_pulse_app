@@ -1,6 +1,5 @@
 import 'package:book_pulse_app/core/constants/app_colors.dart';
 import 'package:book_pulse_app/features/home/data/models/book_model.dart';
-import 'package:book_pulse_app/features/home/presentation/viewmodels/home_viewmodel.dart';
 import 'package:book_pulse_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -17,10 +16,7 @@ class BookDetailsRelatedItem extends StatelessWidget {
       onTap: () {
         context.push(
           AppRoutes.bookDetails,
-          extra: {
-            'book': book,
-            'relatedBooks': HomeViewModel().bestSellers,
-          },
+          extra: book,
         );
       },
       child: Container(

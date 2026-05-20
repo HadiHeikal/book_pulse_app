@@ -1,23 +1,20 @@
 import 'package:book_pulse_app/core/constants/app_colors.dart';
 import 'package:book_pulse_app/core/constants/app_text_styles.dart';
 import 'package:book_pulse_app/features/home/data/models/book_model.dart';
+import 'package:book_pulse_app/features/home/presentation/viewmodels/similar_books_cubit/similar_books_cubit.dart';
 import 'package:book_pulse_app/features/home/presentation/views/widgets/book_details_action_buttons.dart';
 import 'package:book_pulse_app/features/home/presentation/views/widgets/book_details_cover_card.dart';
 import 'package:book_pulse_app/features/home/presentation/views/widgets/book_details_rating_row.dart';
 import 'package:book_pulse_app/features/home/presentation/views/widgets/book_details_related_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 import 'package:go_router/go_router.dart';
 
 class BookDetailsViewBody extends StatelessWidget {
   final BookModel book;
-  final List<BookModel> relatedBooks;
 
-  const BookDetailsViewBody({
-    super.key,
-    required this.book,
-    required this.relatedBooks,
-  });
+  const BookDetailsViewBody({super.key, required this.book});
 
   @override
   Widget build(BuildContext context) {
@@ -153,29 +150,62 @@ class BookDetailsViewBody extends StatelessWidget {
           ],
 
           // ─── You can also like ────────────────────────────────────
-          if (relatedBooks.isNotEmpty) ...[
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Text(
-                'You can also like',
-                style: AppTextStyles.sectionTitle.copyWith(fontSize: 16),
-              ),
-            ),
-            const Gap(16),
-            SizedBox(
-              height: 120,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                itemCount: relatedBooks.length,
-                itemBuilder: (context, index) =>
-                    BookDetailsRelatedItem(book: relatedBooks[index]),
-              ),
-            ),
-            Gap(32 + bottomPadding),
-          ] else
-            Gap(32 + bottomPadding),
+          BlocBuilder<SimilarBooksCubit, SimilarBooksState>(
+            builder: (context, state) {
+              if (state is SimilarBooksLoading) {
+                return Padding(
+                  padding: EdgeInsets.only(bottom: 32 + bottomPadding),
+                  child: const Center(
+                    child: CircularProgressIndicator(color: AppColors.gold),
+                  ),
+                );
+              }
+
+              if (state is SimilarBooksFailure) {
+                return Padding(
+                  padding: EdgeInsets.fromLTRB(24, 0, 24, 32 + bottomPadding),
+                  child: Text(
+                    state.errorMessage,
+                    style: AppTextStyles.body.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                );
+              }
+
+              if (state is SimilarBooksSuccess && state.books.isNotEmpty) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Text(
+                        'You can also like',
+                        style: AppTextStyles.sectionTitle.copyWith(
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    const Gap(16),
+                    SizedBox(
+                      height: 120,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        itemCount: state.books.length,
+                        itemBuilder: (context, index) =>
+                            BookDetailsRelatedItem(book: state.books[index]),
+                      ),
+                    ),
+                    Gap(32 + bottomPadding),
+                  ],
+                );
+              }
+
+              return Gap(32 + bottomPadding);
+            },
+          ),
         ],
       ),
     );

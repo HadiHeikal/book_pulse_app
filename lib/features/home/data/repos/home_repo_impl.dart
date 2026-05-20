@@ -79,4 +79,30 @@ class HomeRepoImpl implements HomeRepo {
       return Failure(ApiError(message: e.toString()));
     }
   }
+
+  @override
+  Future<Result<List<BookModel>>> fetchSimilarBooks(BookModel book) async {
+    try {
+      final query = book.author != 'Unknown Author'
+          ? 'inauthor:${book.author}'
+          : book.title;
+      var data = await apiService.get(
+        endPoint: searchSimilarBooksEndpoint(query, maxResults: 10),
+      );
+      final books = _parseBooks(data)
+          .where(
+            (similarBook) =>
+                similarBook.id != book.id && similarBook.coverUrl.isNotEmpty,
+          )
+          .take(10)
+          .toList();
+
+      return Success(books);
+    } catch (e) {
+      if (e is ApiError) {
+        return Failure(e);
+      }
+      return Failure(ApiError(message: e.toString()));
+    }
+  }
 }

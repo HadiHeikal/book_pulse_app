@@ -31,10 +31,11 @@ class AppRouter {
       path: AppRoutes.bookDetails,
       name: 'bookDetails',
       builder: (context, state) {
-        final extra = state.extra as Map<String, dynamic>;
-        final book = extra['book'] as BookModel;
-        final related = extra['relatedBooks'] as List<BookModel>;
-        return BookDetailsView(book: book, relatedBooks: related);
+        final extra = state.extra;
+        final book = extra is BookModel
+            ? extra
+            : (extra as Map<String, dynamic>)['book'] as BookModel;
+        return BookDetailsView(book: book);
       },
     ),
   ];

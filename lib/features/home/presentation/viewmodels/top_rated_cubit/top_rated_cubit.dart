@@ -13,8 +13,25 @@ class TopRatedCubit extends Cubit<TopRatedState> {
     emit(TopRatedLoading());
     var result = await homeRepo.fetchTopRatedBooks();
     result.fold(
-      onSuccess: (book) {
-        emit(TopRatedSuccess(book: book.first));
+      onSuccess: (books) {
+        if (books.isEmpty) {
+          emit(const TopRatedFailure(errorMessage: 'No top rated books found'));
+          return;
+        }
+
+        final ratedBooks =
+            books
+                .where((book) => book.rating > 0 && book.coverUrl.isNotEmpty)
+                .toList()
+              ..sort((a, b) => b.rating.compareTo(a.rating));
+        final topRatedBook =
+            ratedBooks.cast<BookModel?>().firstWhere(
+              (book) => book?.rating == 5.0,
+              orElse: () => ratedBooks.isNotEmpty ? ratedBooks.first : null,
+            ) ??
+            books.first;
+
+        emit(TopRatedSuccess(book: topRatedBook));
       },
       onFailure: (apiError) {
         emit(TopRatedFailure(errorMessage: apiError.message));
