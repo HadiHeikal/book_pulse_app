@@ -2,8 +2,10 @@ import 'package:book_pulse_app/core/constants/app_colors.dart';
 import 'package:book_pulse_app/core/constants/app_text_styles.dart';
 import 'package:book_pulse_app/features/home/data/models/book_model.dart';
 import 'package:book_pulse_app/features/home/presentation/viewmodels/home_viewmodel.dart';
+import 'package:book_pulse_app/features/home/presentation/viewmodels/top_rated_cubit/top_rated_cubit.dart';
 import 'package:book_pulse_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class TopRatedSection extends StatelessWidget {
@@ -44,138 +46,168 @@ class TopRatedSection extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 16),
-        GestureDetector(
-          onTap: () {
-            context.push(
-              AppRoutes.bookDetails,
-              extra: {
-                'book': book,
-                'relatedBooks': HomeViewModel().continueReadingBooks,
-              },
-            );
-          },
-          child: Container(
-            decoration: BoxDecoration(
-            color: AppColors.cardColor,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: AppColors.divider),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.gold.withValues(alpha: 0.08),
-                blurRadius: 20,
-                offset: const Offset(0, 8),
-              ),
-            ],
-          ),
-          child: Row(
-            children: [
-              // Cover
-              ClipRRect(
-                borderRadius: const BorderRadius.horizontal(
-                  left: Radius.circular(20),
+        BlocBuilder<TopRatedCubit, TopRatedState>(
+          builder: (context, state) {
+            if (state is TopRatedLoading) {
+              return const Center(
+                child: CircularProgressIndicator(color: AppColors.gold),
+              );
+            } else if (state is TopRatedFailure) {
+              return Center(
+                child: Text(
+                  state.errorMessage,
+                  style: const TextStyle(color: Colors.white),
                 ),
-                child: Image.network(
-                  book.coverUrl,
-                  width: 100,
-                  height: 140,
-                  fit: BoxFit.cover,
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Container(
-                      width: 100,
-                      height: 140,
-                      color: AppColors.cardColorDark,
-                      child: const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColors.gold,
-                          strokeWidth: 2,
-                        ),
+              );
+            } else if (state is TopRatedSuccess) {
+              return GestureDetector(
+                onTap: () {
+                  context.push(
+                    AppRoutes.bookDetails,
+                    extra: {
+                      'book': state.book,
+                      'relatedBooks': HomeViewModel().continueReadingBooks,
+                    },
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.cardColor,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: AppColors.divider),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.gold.withValues(alpha: 0.08),
+                        blurRadius: 20,
+                        offset: const Offset(0, 8),
                       ),
-                    );
-                  },
-                  errorBuilder: (_, _, _) => Container(
-                    width: 100,
-                    height: 140,
-                    color: AppColors.cardColorDark,
-                    child: const Icon(
-                      Icons.book,
-                      color: AppColors.gold,
-                      size: 36,
-                    ),
+                    ],
                   ),
-                ),
-              ),
-              // Details
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Row(
                     children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 3,
+                      // Cover
+                      ClipRRect(
+                        borderRadius: const BorderRadius.horizontal(
+                          left: Radius.circular(20),
                         ),
-                        decoration: BoxDecoration(
-                          color: AppColors.gold,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text('Top Pick', style: AppTextStyles.badge),
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        book.title,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: AppTextStyles.bookTitleLarge,
-                      ),
-                      const SizedBox(height: 6),
-                      Text(book.author, style: AppTextStyles.authorName),
-                      const SizedBox(height: 10),
-                      Text(
-                        book.description,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: AppTextStyles.body,
-                      ),
-                      const SizedBox(height: 12),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            '€ ${book.price.toStringAsFixed(2)}',
-                            style: AppTextStyles.price.copyWith(
+                        child: Image.network(
+                          state.book.coverUrl,
+                          width: 100,
+                          height: 140,
+                          fit: BoxFit.cover,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Container(
+                              width: 100,
+                              height: 140,
+                              color: AppColors.cardColorDark,
+                              child: const Center(
+                                child: CircularProgressIndicator(
+                                  color: AppColors.gold,
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                            );
+                          },
+                          errorBuilder: (_, _, _) => Container(
+                            width: 100,
+                            height: 140,
+                            color: AppColors.cardColorDark,
+                            child: const Icon(
+                              Icons.book,
                               color: AppColors.gold,
-                              fontSize: 15,
+                              size: 36,
                             ),
                           ),
-                          Row(
+                        ),
+                      ),
+                      // Details
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Icon(
-                                Icons.star_rounded,
-                                color: AppColors.gold,
-                                size: 14,
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 3,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.gold,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  'Top Pick',
+                                  style: AppTextStyles.badge,
+                                ),
                               ),
-                              const SizedBox(width: 2),
+                              const SizedBox(height: 10),
                               Text(
-                                '${book.rating} (${book.ratingCount})',
-                                style: AppTextStyles.ratingCount,
+                                state.book.title,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTextStyles.bookTitleLarge,
+                              ),
+                              const SizedBox(height: 6),
+                              Text(
+                                state.book.author,
+                                style: AppTextStyles.authorName,
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                state.book.description,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTextStyles.body,
+                              ),
+                              const SizedBox(height: 12),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '€ ${state.book.price.toStringAsFixed(2)}',
+                                    style: AppTextStyles.price.copyWith(
+                                      color: AppColors.gold,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.star_rounded,
+                                        color: AppColors.gold,
+                                        size: 14,
+                                      ),
+                                      const SizedBox(width: 2),
+                                      Text(
+                                        '${state.book.rating} (${state.book.ratingCount})',
+                                        style: AppTextStyles.ratingCount,
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                        ],
+                        ),
                       ),
                     ],
                   ),
                 ),
-              ),
-            ],
-          ),
-        ),
+              );
+            } else {
+              return const Center(
+                child: Text(
+                  'Something went wrong',
+                  style: TextStyle(color: Colors.white),
+                ),
+              );
+            }
+          },
         ),
       ],
     );
   }
 }
-
