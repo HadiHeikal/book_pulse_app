@@ -1,5 +1,6 @@
 import 'package:book_pulse_app/features/home/presentation/viewmodels/home_viewmodel.dart';
 import 'package:book_pulse_app/features/home/presentation/views/widgets/best_seller_item.dart';
+import 'package:book_pulse_app/features/home/presentation/views/widgets/best_seller_section.dart';
 import 'package:book_pulse_app/features/home/presentation/views/widgets/continue_reading_section.dart';
 import 'package:book_pulse_app/features/home/presentation/views/widgets/custom_book_pulse_appbar.dart';
 import 'package:book_pulse_app/features/home/presentation/views/widgets/featured_books_section.dart';
@@ -61,16 +62,7 @@ class HomeViewBody extends StatelessWidget {
         const SliverToBoxAdapter(child: Gap(16)),
 
         // ─── Best Sellers SliverList ──────────────────────────────
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          sliver: SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) =>
-                  BestSellerItem(book: viewModel.bestSellers[index]),
-              childCount: viewModel.bestSellers.length,
-            ),
-          ),
-        ),
+        BestSellerSection(),
 
         // ─── Bottom padding ───────────────────────────────────────
         const SliverToBoxAdapter(child: Gap(32)),
