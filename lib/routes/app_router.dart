@@ -1,6 +1,7 @@
 import 'package:book_pulse_app/features/home/data/models/book_model.dart';
 import 'package:book_pulse_app/features/home/presentation/views/book_details_view.dart';
 import 'package:book_pulse_app/features/home/presentation/views/home_view.dart';
+import 'package:book_pulse_app/features/onboarding/presentation/views/onboarding_view.dart';
 import 'package:book_pulse_app/features/splash/presentation/views/splash_view.dart';
 import 'package:book_pulse_app/routes/app_routes.dart';
 import 'package:go_router/go_router.dart';
@@ -26,6 +27,11 @@ class AppRouter {
       path: AppRoutes.home,
       name: 'home',
       builder: (context, state) => const HomeView(),
+    ),
+    GoRoute(
+      path: AppRoutes.onboarding,
+      name: 'onboarding',
+      builder: (context, state) => const OnboardingView(),
     ),
     GoRoute(
       path: AppRoutes.bookDetails,

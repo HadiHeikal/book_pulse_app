@@ -1,5 +1,6 @@
-import 'package:book_pulse_app/routes/app_routes.dart';
+import 'package:book_pulse_app/features/splash/presentation/viewmodels/splash_cubit/splash_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class SplashViewBody extends StatefulWidget {
@@ -18,7 +19,6 @@ class _SplashViewBodyState extends State<SplashViewBody>
   void initState() {
     super.initState();
     initSlidingAnimation();
-    navigateToHome();
   }
 
   @override
@@ -29,27 +29,32 @@ class _SplashViewBodyState extends State<SplashViewBody>
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Image.asset('assets/images/splash/book-pulse.png'),
-        const SizedBox(
-          height: 4,
-        ),
-        AnimatedBuilder(
-          animation: slidingAnimation,
-          builder: (context, _) {
-            return SlideTransition(
-              position: slidingAnimation,
-              child: const Text(
-                'Read Free Books',
-                textAlign: TextAlign.center,
-              ),
-            );
-          },
-        ),
-      ],
+    return BlocListener<SplashCubit, SplashState>(
+      listener: (context, state) {
+        if (state is SplashSuccess) {
+          context.go(state.nextRoute);
+        }
+      },
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Image.asset('assets/images/splash/book-pulse.png'),
+          const SizedBox(height: 4),
+          AnimatedBuilder(
+            animation: slidingAnimation,
+            builder: (context, _) {
+              return SlideTransition(
+                position: slidingAnimation,
+                child: const Text(
+                  'Read Free Books',
+                  textAlign: TextAlign.center,
+                ),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 
@@ -59,22 +64,11 @@ class _SplashViewBodyState extends State<SplashViewBody>
       duration: const Duration(seconds: 1),
     );
 
-    slidingAnimation =
-        Tween<Offset>(begin: const Offset(0, 2), end: Offset.zero)
-            .animate(animationController);
+    slidingAnimation = Tween<Offset>(
+      begin: const Offset(0, 2),
+      end: Offset.zero,
+    ).animate(animationController);
 
     animationController.forward();
-  }
-
-  void navigateToHome() {
-    Future.delayed(
-      const Duration(seconds: 2),
-      () {
-        if (mounted) {
-          // GoRouter replaces the splash route so the user can't go back to it
-          context.go(AppRoutes.home);
-        }
-      },
-    );
   }
 }

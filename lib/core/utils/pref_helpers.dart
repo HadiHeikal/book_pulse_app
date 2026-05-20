@@ -2,6 +2,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class PrefHelper {
   static const String tokenKey = "AuthToken";
+  static const String onboardingSeenKey = "OnboardingSeen";
+
   // use this methode to save the token in shared preferences
   static Future<void> saveToken(String token) async {
     final pref = await SharedPreferences.getInstance();
@@ -24,5 +26,15 @@ class PrefHelper {
   static Future<bool> hasToken() async {
     final pref = await SharedPreferences.getInstance();
     return pref.containsKey(tokenKey);
+  }
+
+  static Future<void> setOnboardingSeen() async {
+    final pref = await SharedPreferences.getInstance();
+    await pref.setBool(onboardingSeenKey, true);
+  }
+
+  static Future<bool> hasSeenOnboarding() async {
+    final pref = await SharedPreferences.getInstance();
+    return pref.getBool(onboardingSeenKey) ?? false;
   }
 }
